@@ -15,6 +15,7 @@ import { bindActionCreators } from 'redux';
 
 
 import DashboardPage from './containers/DashboardPage';
+import RegisterPage from './containers/RegisterPage';
 
 const splashStyle = StyleSheet.create({
   absoluteContainer: {
@@ -91,6 +92,8 @@ class App extends Component {
     switch (route.name) {
       case 'DashboardPage':
         return <DashboardPage {...route} navigator={navigator} />;
+      case 'RegisterPage':
+        return <RegisterPage {...route} navigator={navigator} />;
       default:
         return (
           <View style={{ flex: 1 }}>

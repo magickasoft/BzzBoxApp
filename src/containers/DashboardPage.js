@@ -8,12 +8,13 @@ import {
     Dimensions,
     StatusBar,
     Platform,
-    // TouchableOpacity,
+    TouchableOpacity,
 } from 'react-native';
 import Button from 'antd-mobile/lib/button';
 import Checkbox from 'antd-mobile/lib/checkbox';
 import List from 'antd-mobile/lib/list';
 import InputItem from 'antd-mobile/lib/input-item';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -64,15 +65,27 @@ const styles = StyleSheet.create({
 @connect(state => ({ ...state }), dispatch => bindActionCreators({}, dispatch))
 
 class DashboardPage extends Component {
+  static propTypes = {
+    navigator: React.PropTypes.any.isRequired, //eslint-disable-line react/forbid-prop-types
+  }
   constructor(props) {
     super(props);
+    this.onRegisterPage = this.onRegisterPage.bind(this);
     this.state = {
       checked: false,
+      username: '',
+      password: '',
     };
   }
 
   componentWillMount() {
 
+  }
+  onRegisterPage() {
+    const { navigator } = this.props;
+    navigator.push({
+      name: 'RegisterPage'
+    });
   }
   render() {
     const bg = require('../resources/logo.png');
@@ -81,23 +94,32 @@ class DashboardPage extends Component {
         <StatusBar backgroundColor="#44c5fb" barStyle="light-content" />
         <ScrollView scrollEnabled={false} contentContainerStyle={{ width: deviceWidth - 60, flex: 1, flexDirection: 'column', justifyContent: 'center', alignSelf: 'center' }}>
           <Image
-            style={{ width: 145, height: 167, justifyContent: 'center', alignSelf: 'center' }}
+            style={{ marginBottom: 15, width: 145, height: 167, justifyContent: 'center', alignSelf: 'center' }}
             source={bg}
             resizeMode="cover"
           />
           <Text style={styles.head}>Open Source Beehives</Text>
           <Text style={styles.sub_head}>BuzzBox Application </Text>
-          <List>
+          <List style={{ marginTop: 15 }}>
             <InputItem
               placeholder="Username"
               labelNumber={3}
-              >1</InputItem>
+              value={this.state.username}
+              onChange={(val) => { this.setState({ username: val }); }}
+            >
+              <Icon name="user-o" size={20} color="#ccc" />
+            </InputItem>
             <InputItem
               placeholder="Password"
+              type="password"
               labelNumber={3}
-              >2</InputItem>
+              value={this.state.password}
+              onChange={(val) => { this.setState({ password: val }); }}
+            >
+              <Icon name="unlock-alt" size={20} color="#ccc" />
+            </InputItem>
           </List>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, marginBottom: 5 }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20, marginBottom: 5 }}>
             <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
               <Checkbox
                 name={'agree'}
@@ -107,9 +129,9 @@ class DashboardPage extends Component {
               />
               <Text style={styles.sub_head}> Remember me</Text>
             </View>
-            <View>
+            <TouchableOpacity>
               <Text style={styles.register_text_last}>Forgot password</Text>
-            </View>
+            </TouchableOpacity>
           </View>
 
           <Button
@@ -120,7 +142,11 @@ class DashboardPage extends Component {
           </Button>
           <View style={{ flexDirection: 'row', justifyContent: 'flex-start', marginTop: 10 }}>
             <Text style={styles.register_text_first}>or </Text>
-            <Text style={styles.register_text_last}>register</Text>
+            <TouchableOpacity
+              onPress={this.onRegisterPage}
+            >
+              <Text style={styles.register_text_last}>register now!</Text>
+            </TouchableOpacity>
           </View>
         </ScrollView>
       </View>
